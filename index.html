@@ -371,6 +371,42 @@ button{font-family:inherit}
   .cv-page-wrap{background:none;padding:0;box-shadow:none}
   #cvPage{box-shadow:none;width:auto;min-height:0}
 }
+
+/* ---------- Interview-Coach (neu, nur in #view-coach) ---------- */
+#view-coach .cnav{display:flex;gap:6px;overflow-x:auto;margin-bottom:18px;padding-bottom:4px}
+#view-coach .cnav button{font:inherit;font-size:13.5px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;white-space:nowrap}
+#view-coach .cnav button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+#view-coach .card{margin-bottom:14px}
+#view-coach h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 6px}
+#view-coach p.sub{color:var(--ink-soft);margin:0 0 16px;font-size:14px}
+#view-coach .btn{background:var(--card);color:var(--ink);border:1px solid var(--line);padding:8px 14px;border-radius:9px;font-size:13.5px}
+#view-coach .btn:hover{background:var(--paper-2)}
+#view-coach .btn.pri{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+#view-coach .btn.pri:hover{background:var(--accent-ink)}
+#view-coach .btn.sm{padding:5px 10px;font-size:12.5px}
+#view-coach .btn.r1{background:var(--rust-bg)}#view-coach .btn.r2{background:var(--amber-bg)}#view-coach .btn.r3{background:var(--moss-bg)}
+#view-coach .chip{padding:6px 12px;font-size:12.5px;margin:0}
+#view-coach .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+#view-coach .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+#view-coach .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#view-coach .sp{justify-content:space-between}
+#view-coach .step{background:var(--accent-bg);border-radius:12px;padding:14px;font-size:14px}
+#view-coach .step b{display:block;color:var(--accent);font-size:22px}
+#view-coach .q{font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:10px 0 4px}
+#view-coach .en{color:var(--ink-soft);font-style:italic;margin-bottom:8px;font-size:14px}
+#view-coach .tip{background:var(--amber-bg);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:13.5px}
+#view-coach .ex{background:var(--moss-bg);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:13.5px;line-height:1.55}
+#view-coach textarea,#view-coach input:not([type=checkbox]),#view-coach select{width:100%;font:inherit;font-size:14px;padding:9px 11px;border-radius:9px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+#view-coach textarea{min-height:96px;resize:vertical}
+#view-coach label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin:10px 0 4px}
+#view-coach .bar{height:9px;background:var(--line);border-radius:9px;overflow:hidden}
+#view-coach .bar i{display:block;height:100%;background:var(--moss);transition:width .3s}
+#view-coach .tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent)}
+#view-coach .timer{font:600 26px 'JetBrains Mono',monospace}#view-coach .timer.low{color:var(--rust)}
+#view-coach .chk{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);align-items:flex-start;font-size:14px}
+#view-coach .chk input{width:18px;margin-top:3px;accent-color:var(--accent)}
+#view-coach .chk.d span{text-decoration:line-through;color:var(--ink-faint)}
+#view-coach .hide{display:none}
+#view-coach .big{font-family:'Fraunces',serif;font-weight:600;font-size:40px;line-height:1.1}
 </style>
 </head>
 <body>
@@ -412,6 +448,16 @@ button{font-family:inherit}
         <button data-view="cv">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
           Lebenslauf
+        </button>
+      </div>
+    </div>
+
+    <div class="navgroup">
+      <div class="heading">Vorbereitung</div>
+      <div class="navlinks">
+        <button data-view="coach">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>
+          Interview-Coach
         </button>
       </div>
     </div>
@@ -560,6 +606,18 @@ button{font-family:inherit}
         <div class="cv-form" id="cvForm"></div>
         <div class="cv-page-wrap"><div id="cvPage"></div></div>
       </div>
+    </section>
+
+    <!-- ========== INTERVIEW-COACH VIEW ========== -->
+    <section class="view" id="view-coach">
+      <div class="pageheader">
+        <div>
+          <h1>Interview-Coach</h1>
+          <p>Schritt für Schritt vorbereiten, laut üben und sicher ins Gespräch gehen — auch ohne Vorerfahrung.</p>
+        </div>
+      </div>
+      <div class="cnav" id="coachNav"></div>
+      <div id="coachMain"></div>
     </section>
 
     <!-- ========== EINSTELLUNGEN VIEW ========== -->
@@ -798,6 +856,8 @@ function switchView(v){
   if(v==='cv') renderCvForm();
   if(v==='kontakte') renderContacts();
   if(v==='dashboard') renderDashboard();
+  if(v==='coach' && window.renderCoach) window.renderCoach();
+  if(v!=='coach' && window.stopCoachT) window.stopCoachT();
 }
 
 /* ============================================================
@@ -1473,6 +1533,87 @@ document.getElementById('downloadPdf').addEventListener('click', ()=>{
   showToast('PDF wird erstellt…');
   html2pdf().set(opt).from(el).save();
 });
+
+/* ===== INTERVIEW-COACH (neu) ===== */
+(function(){
+const $=s=>document.querySelector('#view-coach '+s);
+const $$=s=>document.querySelectorAll('#view-coach '+s);
+const S={get(k,d){try{const v=localStorage.getItem('ic_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('ic_'+k,JSON.stringify(v))}catch(e){}}};
+const Q=[
+{c:'Einstieg',q:'Stellen Sie sich bitte kurz vor.',en:'Please introduce yourself briefly.',tip:'Max. 60–90 Sekunden. Struktur: Jetzt → Vorher → Warum diese Stelle.',a:'Ich bin Qualitätsingenieur und schließe gerade meinen Master in Scientific Instrumentation mit Schwerpunkt Qualitätsmanagement an der EAH Jena ab. Bei Magna in Heiligenstadt habe ich als Werkstudent Qualitätsdaten analysiert, ein mikromagnetisches Härtemessverfahren kalibriert und eine eigene App für die Schichtberichte entwickelt. Davor habe ich in der Stahlfertigung Erfahrung mit Prüfung, SPC und Fehleranalyse gesammelt. Jetzt suche ich eine Stelle, in der ich Qualität und Datenanalyse verbinden kann.'},
+{c:'Einstieg',q:'Warum möchten Sie bei uns arbeiten?',en:'Why do you want to work for us?',tip:'Recherchiere vorher 3 Dinge: Produkte, Kunden, Standort/Werte. Nenne mindestens eines beim Namen.',a:'Ihr Unternehmen fertigt [Produkt] für [Branche], und Qualität ist dort besonders wichtig. Meine Erfahrung mit SPC, Reklamationsbearbeitung und Messtechnik passt genau zu der Aufgabe. Außerdem reizt mich, dass ich hier [konkreter Punkt aus der Anzeige] übernehmen kann.'},
+{c:'Einstieg',q:'Wie gut ist Ihr Deutsch?',en:'How good is your German?',tip:'Ehrlich bleiben, aber aktiv klingen. Zeige, dass du lernst.',a:'Mein Deutsch ist auf Niveau B1 und ich lerne aktiv für B2. Fachbegriffe wie FMEA, 8D, SPC und Reklamation nutze ich täglich bei der Arbeit. Wenn ich etwas nicht verstehe, frage ich höflich nach.'},
+{c:'Fachlich',q:'Wie gehen Sie bei einer Kundenreklamation vor?',en:'How do you handle a customer complaint?',tip:'Nutze die 8D-Schritte als roten Faden.',a:'Zuerst sichere ich das Problem mit einer Sofortmaßnahme ab, zum Beispiel Sperrung betroffener Teile. Dann beschreibe ich den Fehler genau und suche die Ursache mit 5-Why und Ishikawa. Danach lege ich Korrektur- und Vorbeugemaßnahmen fest, prüfe ihre Wirksamkeit und dokumentiere alles im 8D-Bericht.'},
+{c:'Fachlich',q:'Was ist SPC und wann setzen Sie es ein?',en:'What is SPC and when do you use it?',tip:'Ein Satz Definition + ein Beispiel aus deiner Arbeit.',a:'SPC heißt statistische Prozesslenkung. Mit Regelkarten beobachte ich, ob ein Prozess stabil und fähig ist, und erkenne Trends, bevor Ausschuss entsteht. Ich nutze es bei Maßen und Kennzahlen, die sich schleichend verändern können.'},
+{c:'Fachlich',q:'Was ist der Unterschied zwischen Korrektur- und Vorbeugemaßnahme?',en:'Difference between corrective and preventive action?',tip:'Kurz und klar: Vergangenheit vs. Zukunft.',a:'Eine Korrekturmaßnahme beseitigt die Ursache eines Fehlers, der schon aufgetreten ist. Eine Vorvorbeugemaßnahme verhindert, dass ein möglicher Fehler überhaupt entsteht, zum Beispiel durch eine FMEA oder Prozessänderung.'.replace('Vorvor','Vor')},
+{c:'Fachlich',q:'Was ist eine Messsystemanalyse (MSA / Gage R&R)?',en:'What is a measurement system analysis?',tip:'Wichtig: Man prüft die Messung, nicht das Teil.',a:'Damit prüfe ich, ob ein Messsystem zuverlässig ist. Bei Gage R&R schaue ich auf Wiederholbarkeit und Vergleichbarkeit zwischen Prüfern. Nur mit einem geeigneten Messsystem sind Prozessdaten und SPC überhaupt aussagekräftig.'},
+{c:'Verhalten',q:'Beschreiben Sie ein Projekt, auf das Sie stolz sind.',en:'Describe a project you are proud of.',tip:'STAR: Situation, Aufgabe, Handlung, Ergebnis. Nutze Zahlen!',a:'Situation: Im Laserbereich bei Magna wurden Schichtberichte manuell erstellt. Aufgabe: Ich sollte den Prozess vereinfachen. Handlung: Ich habe eine SQDCM-App in Python und PyQt5 entwickelt, die Daten erfasst und auswertet. Ergebnis: Wir sparen rund 30 % Zeit im Reporting und die Daten sind einheitlicher.'},
+{c:'Verhalten',q:'Erzählen Sie von einem Problem, das Sie mit Daten gelöst haben.',en:'Tell me about a problem you solved with data.',tip:'Zeige deinen Denkweg: Ziel, Methode, Zahl.',a:'In meiner Masterarbeit habe ich ein mikromagnetisches Messverfahren (3MA) kalibriert, um Härte zerstörungsfrei vorherzusagen. Ich habe Regressionsmodelle entwickelt und Einflüsse wie Luftspalt und Beschichtung untersucht. Das Modell erreichte ein R² von 0,957 im Vergleich zu HV10-Messungen.'},
+{c:'Verhalten',q:'Erzählen Sie von einem Fehler und was Sie daraus gelernt haben.',en:'Tell me about a mistake and what you learned.',tip:'Kein Drama. Fehler → Lösung → Lerneffekt. Wähle einen kleinen, echten Fehler.',a:'Einmal habe ich in einer Auswertung Daten aus zwei Schichten vermischt und es erst bei einer Plausibilitätsprüfung bemerkt. Ich habe den Bericht korrigiert und eine automatische Prüfung eingebaut. Seitdem kontrolliere ich Datenquellen immer vor der Analyse.'},
+{c:'Verhalten',q:'Wie gehen Sie mit Konflikten im Team um?',en:'How do you handle conflicts in a team?',tip:'Zeige Ruhe, Zuhören, Fakten.',a:'Ich höre zuerst zu und versuche, die Sicht der anderen zu verstehen. Dann bringe ich Daten und Fakten ins Gespräch, damit wir sachlich entscheiden. In der Qualität hilft das oft, weil alle dasselbe Ziel haben: gute Teile für den Kunden.'},
+{c:'Motivation',q:'Was sind Ihre Stärken und Schwächen?',en:'What are your strengths and weaknesses?',tip:'Schwäche echt, aber nicht kritisch — plus was du dagegen tust.',a:'Meine Stärke ist, Qualität und Daten zu verbinden: Ich kann Ursachen analysieren und Ergebnisse verständlich darstellen. Eine Schwäche ist mein Deutsch im Fachgespräch. Ich arbeite daran, indem ich täglich übe und Fachtexte lese.'},
+{c:'Logistik',q:'Was sind Ihre Gehaltsvorstellungen?',en:'What are your salary expectations?',tip:'Vorher Marktwerte recherchieren (Stellenanzeigen, Gehaltsportale). Nenne eine Spanne, keine Einzelzahl.',a:'Nach meiner Recherche für vergleichbare Stellen in der Region stelle ich mir ein Jahresgehalt zwischen [von] und [bis] Euro brutto vor. Ich bin aber offen für ein Gespräch, wenn die Aufgaben und Entwicklungsmöglichkeiten passen.'},
+{c:'Logistik',q:'Haben Sie noch Fragen an uns?',en:'Do you have any questions for us?',tip:'Sag nie „nein“. Stelle 2–3 Fragen aus dem Tab „Fragen an sie“.',a:'Ja, gerne: Wie sieht die Einarbeitung in den ersten 90 Tagen aus? Welche Qualitätskennzahlen sind für das Team am wichtigsten? Und wie geht es nach dem Gespräch weiter?'}
+];
+const CATS=['Alle',...new Set(Q.map(x=>x.c))];
+const ASK=['Wie sieht die Einarbeitung in den ersten 90 Tagen aus?','Welche Qualitätskennzahlen sind für das Team am wichtigsten?','Mit welchen Kunden oder Normen (z. B. IATF 16949, ISO 9001) arbeiten Sie?','Welche Software nutzen Sie (CAQ, SAP, Power BI)?','Wie ist das Team aufgebaut und an wen berichte ich?','Gibt es Weiterbildungsmöglichkeiten, z. B. Deutschkurs oder Auditor-Schulung?','Wie geht es nach dem Gespräch weiter und bis wann höre ich von Ihnen?'];
+const CHK={'Eine Woche vorher':['Stellenanzeige noch einmal lesen und Schlüsselwörter markieren','Firma recherchieren: Produkte, Kunden, Standort, News','Lebenslauf lesen und jede Zahl erklären können','3 STAR-Geschichten vorbereiten (Projekt, Problem, Team)','Jeden Tag 5 Fragen laut üben'],'Am Tag vorher':['Anfahrt prüfen, Puffer von 30 Minuten einplanen','Kleidung, Zeugnisse und Lebenslauf (2 Kopien) bereitlegen','2–3 Fragen an die Firma aufschreiben','Früh schlafen gehen'],'Am Gesprächstag':['10 Minuten vorher da sein, nicht früher','Handy aus, Wasser trinken, tief atmen','Freundlich grüßen, Blickkontakt, Namen merken','Beim Nichtverstehen höflich nachfragen'],'Danach':['Innerhalb von 24 Stunden kurze Dankes-E-Mail senden','Notizen machen: Was lief gut, was nicht?','Nach 7 Tagen freundlich nachfassen']};
+const TABS=[['start','🏁 Start'],['train','🃏 Fragen-Trainer'],['mock','🎤 Probe-Interview'],['star','⭐ STAR-Baukasten'],['pitch','🗣️ 60-Sek-Pitch'],['ask','❓ Fragen an sie'],['chk','✅ Checkliste']];
+let tab='start',cat='Alle',idx=0,mock=null,tm=null;
+function nav(){$('#coachNav').innerHTML=TABS.map(t=>`<button class="${t[0]==tab?'on':''}" data-t="${t[0]}">${t[1]}</button>`).join('');$$('#coachNav button').forEach(b=>b.onclick=()=>{stopT();tab=b.dataset.t;render()})}
+function stopT(){clearInterval(tm);tm=null}
+function timer(el,sec,done){stopT();let s=sec;const f=()=>{el.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');el.classList.toggle('low',s<=15)};f();tm=setInterval(()=>{s--;f();if(s<=0){stopT();done&&done()}},1000)}
+function render(){nav();stopT();({start,train,mockV,star,pitch,ask,chk})[tab==='mock'?'mockV':tab]();window.scrollTo(0,0)}
+function start(){const r=S.get('rate',{});const n=Object.values(r).filter(v=>v==3).length;
+$('#coachMain').innerHTML=`<div class="card"><h2>Willkommen! So klappt's in 3 Schritten</h2><p class="sub">Du musst nichts vorher wissen. Fang einfach mit Schritt 1 an.</p>
+<div class="grid"><div class="step"><b>1</b>Lies im <i>Fragen-Trainer</i> die Frage, den Tipp und die Beispielantwort. Schreibe dann deine eigene Antwort.</div><div class="step"><b>2</b>Übe laut mit dem Timer. Bewerte dich: <i>unsicher</i>, <i>geht so</i> oder <i>sitzt!</i></div><div class="step"><b>3</b>Mach das <i>Probe-Interview</i>: 5 zufällige Fragen wie im echten Gespräch.</div></div></div>
+<div class="card"><h2>Dein Fortschritt</h2><p class="sub">${n} von ${Q.length} Fragen sitzen.</p><div class="bar"><i style="width:${n/Q.length*100}%"></i></div></div>
+<div class="card"><h2>3 goldene Regeln</h2><p>🗣️ <b>Laut üben</b> — nicht nur im Kopf. Sprechen fühlt sich anders an als Lesen.<br>📊 <b>Zahlen nennen</b> — „30 % Zeitersparnis“ überzeugt mehr als „viel schneller“.<br>🙋 <b>Nachfragen ist erlaubt</b> — „Könnten Sie das bitte wiederholen?“ zeigt Professionalität.</p></div>`}
+function train(){const list=Q.map((x,i)=>({...x,i})).filter(x=>cat=='Alle'||x.c==cat);if(idx>=list.length)idx=0;const x=list[idx];const r=S.get('rate',{}),ans=S.get('ans',{});
+$('#coachMain').innerHTML=`<div class="row" style="margin-bottom:12px">${CATS.map(c=>`<button class="chip ${c==cat?'on':''}" data-c="${c}">${c}</button>`).join('')}</div>
+<div class="card"><div class="row sp"><span class="tag">${x.c} · Frage ${idx+1}/${list.length}</span><span>${['','😟 unsicher','🙂 geht so','💪 sitzt!'][r[x.i]||0]}</span></div>
+<div class="q">${x.q}</div><div class="en">🇬🇧 ${x.en}</div><div class="tip">💡 ${x.tip}</div>
+<label>Deine Antwort (wird gespeichert)</label><textarea id="ta" placeholder="Schreibe hier in deinen Worten…">${''}</textarea>
+<div class="row" style="margin-top:10px"><button class="btn" id="tb">⏱ 90 Sek. laut üben</button><span class="timer" id="tt">1:30</span><button class="btn" id="sx">👀 Beispiel</button></div>
+<div class="ex hide" id="exb"><b>Beispielantwort:</b><br>${x.a}</div>
+<div class="row" style="margin-top:12px"><span>Wie sicher bist du?</span><button class="btn sm r1" data-r="1">😟 unsicher</button><button class="btn sm r2" data-r="2">🙂 geht so</button><button class="btn sm r3" data-r="3">💪 sitzt!</button></div>
+<div class="row sp" style="margin-top:14px"><button class="btn" id="pv">← Zurück</button><button class="btn pri" id="nx">Weiter →</button></div></div>`;
+$('#ta').value=ans[x.i]||'';$('#ta').oninput=e=>{ans[x.i]=e.target.value;S.set('ans',ans)};
+$$('[data-c]').forEach(b=>b.onclick=()=>{cat=b.dataset.c;idx=0;train()});
+$$('[data-r]').forEach(b=>b.onclick=()=>{r[x.i]=+b.dataset.r;S.set('rate',r);train()});
+$('#sx').onclick=()=>$('#exb').classList.toggle('hide');$('#tb').onclick=()=>timer($('#tt'),90);
+$('#pv').onclick=()=>{idx=(idx-1+list.length)%list.length;train()};$('#nx').onclick=()=>{idx=(idx+1)%list.length;train()}}
+function mockV(){if(!mock){$('#coachMain').innerHTML=`<div class="card"><h2>🎤 Probe-Interview</h2><p>5 zufällige Fragen, je 2 Minuten. Sprich laut, tippe Stichpunkte, bewerte dich ehrlich. Am Ende siehst du deine Auswertung.</p><button class="btn pri" id="go">Los geht's</button></div>`;$('#go').onclick=()=>{mock={qs:[...Q].sort(()=>Math.random()-.5).slice(0,5),i:0,sc:[],show:false};mockV()};return}
+if(mock.i>=5){const t=mock.sc.reduce((a,b)=>a+b,0),p=Math.round(t/15*100);const w={};mock.qs.forEach((q,k)=>w[q.c]=(w[q.c]||0)+mock.sc[k]);const weak=Object.entries(w).sort((a,b)=>a[1]-b[1])[0][0];
+$('#coachMain').innerHTML=`<div class="card" style="text-align:center"><div class="big">${p}%</div><p>${p>=80?'Stark! Du bist bereit. 🎉':p>=50?'Gute Basis — noch etwas Übung, dann sitzt es.':'Kein Problem, das ist der Anfang. Übe die Fragen im Trainer nochmal.'}</p><p class="sub">Schwächster Bereich: <b>${weak}</b> — üb genau diese Kategorie im Fragen-Trainer.</p><button class="btn pri" id="ag">Nochmal</button></div>`;$('#ag').onclick=()=>{mock=null;mockV()};return}
+const x=mock.qs[mock.i];
+$('#coachMain').innerHTML=`<div class="card"><div class="row sp"><span class="tag">Frage ${mock.i+1} von 5</span><span class="timer" id="mt">2:00</span></div><div class="bar"><i style="width:${mock.i*20}%"></i></div><div class="q">${x.q}</div><div class="en">${x.en}</div><label>Stichpunkte</label><textarea></textarea>
+<div class="row" style="margin-top:10px"><button class="btn" id="mx">👀 Beispiel</button><span class="sub" style="margin:0">Erst antworten, dann anschauen!</span></div><div class="ex hide" id="mb">${x.a}</div>
+<div class="row" style="margin-top:12px"><span>Bewerte dich:</span><button class="btn sm r1" data-s="1">😟</button><button class="btn sm r2" data-s="2">🙂</button><button class="btn sm r3" data-s="3">💪</button></div></div>`;
+timer($('#mt'),120);$('#mx').onclick=()=>$('#mb').classList.toggle('hide');
+$$('[data-s]').forEach(b=>b.onclick=()=>{mock.sc.push(+b.dataset.s);mock.i++;mockV()})}
+function star(){const d=S.get('star',{s:'',t:'',a:'',r:''});const F=[['s','Situation — Wo und wann? Was war das Problem?'],['t','Task/Aufgabe — Was war deine Aufgabe?'],['a','Action/Handlung — Was hast DU konkret getan?'],['r','Result/Ergebnis — Was kam heraus? Nenne Zahlen.']];
+$('#coachMain').innerHTML=`<div class="card"><h2>⭐ STAR-Baukasten</h2><p class="sub">Für Fragen wie „Erzählen Sie von einer Situation, in der…“. Fülle 4 Felder, die Antwort entsteht automatisch.</p>${F.map(f=>`<label>${f[1]}</label><textarea data-f="${f[0]}" style="min-height:64px"></textarea>`).join('')}
+<div class="row" style="margin-top:12px"><button class="btn" id="ex">Beispiel laden (SQDCM-App)</button></div></div><div class="card"><h2>Deine Antwort</h2><p id="out"></p><div class="row"><span class="sub" id="wc" style="margin:0"></span><button class="btn sm" id="cp">Kopieren</button></div></div>`;
+const up=()=>{const t=[d.s,d.t,d.a,d.r].filter(Boolean).join(' ');$('#out').textContent=t||'Hier erscheint deine Antwort…';const w=t.split(/\s+/).filter(Boolean).length;$('#wc').textContent=w+' Wörter · ca. '+Math.round(w/2.2)+' Sek. Sprechzeit (Ziel: 60–120)'};
+$$('[data-f]').forEach(t=>{t.value=d[t.dataset.f];t.oninput=()=>{d[t.dataset.f]=t.value;S.set('star',d);up()}});
+$('#ex').onclick=()=>{Object.assign(d,{s:'Im Laserbereich bei Magna wurden Schichtberichte noch manuell erstellt.',t:'Ich sollte das Reporting vereinfachen und die Datenqualität verbessern.',a:'Ich habe selbstständig eine SQDCM-App mit Python und PyQt5 entwickelt und mit dem Team getestet.',r:'Wir sparen etwa 30 % Zeit im Reporting und haben einheitliche Daten.'});S.set('star',d);star()};
+$('#cp').onclick=()=>{try{navigator.clipboard.writeText($('#out').textContent)}catch(e){}};up()}
+function pitch(){const d=S.get('pitch',{a:'',b:'',c:''});const F=[['a','1) Wer bin ich? (Beruf, Abschluss)'],['b','2) Was kann ich? (2 Stärken mit Beweis)'],['c','3) Warum diese Stelle? (Firma nennen)']];
+$('#coachMain').innerHTML=`<div class="card"><h2>🗣️ 60-Sekunden-Pitch</h2><p class="sub">Deine Antwort auf „Erzählen Sie etwas über sich“. Kurz, klar, mit Beweis.</p>${F.map(f=>`<label>${f[1]}</label><textarea data-f="${f[0]}" style="min-height:70px"></textarea>`).join('')}
+<div class="row" style="margin-top:12px"><button class="btn" id="ex">Beispiel laden</button><button class="btn" id="tb">⏱ 60 Sek. üben</button><span class="timer" id="tt">1:00</span></div><p class="sub" id="wc" style="margin-top:10px"></p></div>`;
+const up=()=>{const w=[d.a,d.b,d.c].join(' ').split(/\s+/).filter(Boolean).length;$('#wc').textContent=w+' Wörter ≈ '+Math.round(w/2.2)+' Sek. — Ziel: 130–150 Wörter.'};
+$$('[data-f]').forEach(t=>{t.value=d[t.dataset.f];t.oninput=()=>{d[t.dataset.f]=t.value;S.set('pitch',d);up()}});
+$('#ex').onclick=()=>{Object.assign(d,{a:'Ich bin Qualitätsingenieur und schließe meinen Master in Scientific Instrumentation (Qualitätsmanagement) in Jena ab.',b:'Ich analysiere Qualitätsdaten mit SPC, Power BI und Python und habe bei Magna ein Messverfahren kalibriert und ein Reporting-Tool entwickelt, das 30 % Zeit spart.',c:'Ihre Stelle verbindet Fertigungsqualität mit Datenanalyse, und genau dort möchte ich mein Wissen einsetzen.'});S.set('pitch',d);pitch()};
+$('#tb').onclick=()=>timer($('#tt'),60);up()}
+function ask(){const f=S.get('fav',[]);$('#coachMain').innerHTML=`<div class="card"><h2>❓ Fragen an den Arbeitgeber</h2><p class="sub">Tippe auf ⭐, um 2–3 Favoriten für dein Gespräch zu markieren.</p>${ASK.map((q,i)=>`<div class="chk"><input type="checkbox" data-i="${i}" ${f.includes(i)?'checked':''}><span>${q}</span></div>`).join('')}</div>`;
+$$('[data-i]').forEach(c=>c.onchange=()=>{const i=+c.dataset.i;const n=c.checked?[...f.filter(x=>x!=i),i]:f.filter(x=>x!=i);S.set('fav',n)})}
+function chk(){const d=S.get('chk',{});$('#coachMain').innerHTML=Object.entries(CHK).map(([g,l])=>`<div class="card"><h2>${g}</h2>${l.map((t,i)=>{const k=g+i;return `<label class="chk ${d[k]?'d':''}" style="margin:0;font-size:15px;color:inherit;font-weight:400"><input type="checkbox" data-k="${k}" ${d[k]?'checked':''}><span>${t}</span></label>`}).join('')}</div>`).join('');
+$$('[data-k]').forEach(c=>c.onchange=()=>{d[c.dataset.k]=c.checked;S.set('chk',d);chk()})}
+
+window.renderCoach=()=>render();
+window.stopCoachT=stopT;
+})();
 
 /* init CV + dashboard */
 renderCvForm();
